@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Googleドライブ共有リンク直リン変換くん</title>
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+</head>
+
+<body>
+    <main class="container">
+        <h1>Googleドライブ共有リンク直リン変換くん</h1>
+        <article>
+            <form>
+                <label for="share-link">共有リンク</label>
+                <input type="share-link" id="share-link" name="share-link"
+                    placeholder="https://drive.google.com/file/d/XXXXXXXXXXXXXXXX/view?usp=sharing" required>
+
+                <button id="convert-button">👇 変換 👇</button>
+
+                <label for="direct-link">直接リンク</label>
+                <div style="display: flex; ">
+                    <input id="direct-link" id="direct-link" name="direct-link"
+                        placeholder="https://drive.google.com/uc?id=XXXXXXXXXXXXXXXX" readonly>
+                    <button id="copy-button" style="width: 8em; margin-left: 1rem">👈 コピー</button>
+                </div>
+            </form>
+        </article>
+    </main>
+    <script type="text/javascript">
+        window.addEventListener("load", () => {
+
+            const shareLink = document.getElementById("share-link");
+            const convertButton = document.getElementById("convert-button");
+            const directLink = document.getElementById("direct-link");
+            const copyButton = document.getElementById("copy-button");
+
+            console.log("shareLink:", shareLink)
+            console.log("convertButton:", convertButton)
+            console.log("directLink:", directLink)
+            console.log("copyButton:", convertButton)
+
+            convertButton.addEventListener("click", (event) => {
+                const result = /\/file\/d\/([^/]+)\/view/.exec(shareLink.value);
+                if (result) {
+                    directLink.value = "https://drive.google.com/uc?id=" + result[1];
+                } else {
+                    directLink.value = "変換に失敗しました";
+                }
+
+                event.preventDefault();
+                return false;
+            });
+
+            copyButton.addEventListener("click", (event) => {
+                const div = document.createElement("div");
+                div.innerText = directLink.value;
+                document.body.appendChild(div);
+
+                const selection = window.getSelection();
+                const range = document.createRange();
+                range.selectNodeContents(div);
+                selection.removeAllRanges();
+                selection.addRange(range);
+                document.execCommand("Copy");
+                selection.removeAllRanges();
+
+                div.remove();
+
+                event.target.innerHTML = "👈 ✅";
+                handler = setTimeout(() => {
+                    event.target.innerHTML = "👈 コピー";
+                }, 1000);
+
+                event.preventDefault();
+                return false;
+            });
+        });
+    </script>
+</body>
+
+</html>
