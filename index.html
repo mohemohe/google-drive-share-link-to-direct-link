@@ -18,11 +18,13 @@
                 <button id="convert-button">👇 変換 👇</button>
 
                 <label for="direct-link">直接リンク</label>
-                <div style="display: flex; ">
+                <div style="display: flex;">
                     <input id="direct-link" id="direct-link" name="direct-link"
-                        placeholder="https://drive.google.com/uc?id=XXXXXXXXXXXXXXXX" readonly>
-                    <button id="copy-button" style="width: 8em; margin-left: 1rem">👈 コピー</button>
+                        placeholder="https://drive.google.com/uc?id=XXXXXXXXXXXXXXXX" readonly
+                        style="margin-bottom: 0;">
+                    <button id="copy-button" style="width: 8em; margin-left: 1rem; margin-bottom: 0;">👈 コピー</button>
                 </div>
+                <small style="color: var(--muted-color);">公開範囲を<code>リンクを知っている全員</code>にするのを忘れないこと</small>
             </form>
         </article>
     </main>
@@ -52,6 +54,11 @@
             });
 
             copyButton.addEventListener("click", (event) => {
+                if (!directLink.value.startsWith("http")) {
+                    event.preventDefault();
+                    return false;
+                }
+
                 const div = document.createElement("div");
                 div.innerText = directLink.value;
                 document.body.appendChild(div);
