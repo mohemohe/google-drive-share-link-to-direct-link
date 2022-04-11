@@ -55,6 +55,11 @@
 
             copyButton.addEventListener("click", (event) => {
                 if (!directLink.value.startsWith("http")) {
+                    event.target.innerHTML = "👈 🚫";
+                    handler = setTimeout(() => {
+                        event.target.innerHTML = "👈 コピー";
+                    }, 1000);
+
                     event.preventDefault();
                     return false;
                 }
